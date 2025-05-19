@@ -38,9 +38,13 @@ const FILTER_KEYWORDS = [
   ];
 
   function matchesFilter(text) {
-    return FILTER_KEYWORDS.some((keyword) =>
-      text.toLowerCase().includes(keyword)
-    );
+    return FILTER_KEYWORDS.some((keyword) => {
+       if(text.toLowerCase().includes(keyword)) {
+        console.log("Matched keyword:", keyword);
+        return true; 
+        }
+      return false;
+    });
   }
   
 
