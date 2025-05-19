@@ -38,8 +38,12 @@ const FILTER_KEYWORDS = [
   ];
 
   function matchesFilter(text) {
+    const lowerText = text.toLowerCase();
+
     return FILTER_KEYWORDS.some((keyword) => {
-       if(text.toLowerCase().includes(keyword)) {
+       const pattern = new RegExp(`\\b${keyword}\\b`, 'i');
+       const isMatch = pattern.test(lowerText)
+       if(isMatch) {
         console.log("Matched keyword:", keyword);
         return true; 
         }
@@ -81,7 +85,7 @@ client.on('messageCreate', async (message) => {
             role: "system",
             content: `You are a professional financial analyst and investment advisor. Your job is to read a list of financial news headlines and output:
 
-1. A recommendation: **Buy**, **Sell**, or **Neutral** — based on the likely short-term market reaction.
+1. A recommendation: **Buy**, **Sell**, or **Neutral** — based on the likely short-term, even momentary market reaction.
 2. A very brief summary of the overall sentiment.
 
 Be objective, concise, and realistic. Focus only on actionable financial impact. If multiple assets are mentioned, give your view per asset.
