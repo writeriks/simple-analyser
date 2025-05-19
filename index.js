@@ -84,7 +84,8 @@ client.on('messageCreate', async (message) => {
 1. A recommendation: **Buy**, **Sell**, or **Neutral** — based on the likely short-term market reaction.
 2. A very brief summary of the overall sentiment.
 
-Be objective, concise, and realistic. Focus only on actionable financial impact. If multiple assets are mentioned, give your view per asset.`
+Be objective, concise, and realistic. Focus only on actionable financial impact. If multiple assets are mentioned, give your view per asset.
+Use emojis to improve readability. Use bullet points for clarity.`
           },
           {
             role: "user",
