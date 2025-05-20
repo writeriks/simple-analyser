@@ -102,10 +102,10 @@ client.on('messageCreate', async (message) => {
       const result = completion.choices[0].message.content;
       const formattedMessage = `🧵 **Tweets Analyzed:**\n${tweetBuffer.map((t, i) => `${i + 1}. ${t}`).join("\n")}
 
-      ${result}`;
+      📊 Bulk Tweet Analysis:\n${result}`;
       
       const replyChannel = await client.channels.fetch(REPLY_CHANNEL);
-      replyChannel.send(`📊 Bulk Tweet Analysis:\n${result}`);
+      replyChannel.send(`${formattedMessage}`);
     } catch (err) {
       console.error("❌ OpenAI error:", err);
     }
