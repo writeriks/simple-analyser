@@ -75,30 +75,35 @@ client.on('messageCreate', async (message) => {
   // Wait 5 seconds after last message before processing
   bufferTimer = setTimeout(async () => {
     const combinedText = tweetBuffer.map((t, i) => `${i + 1}. ${t}`).join("\n\n");
+    
     tweetBuffer = []; // Reset buffer
 
     try {
       const completion = await openai.chat.completions.create({
         model: "gpt-4",
         messages: [
-          {
-            role: "system",
-            content: `You are a professional financial analyst and investment advisor. Your job is to read a list of financial news headlines and output:
+      {
+      role: "system",
+      content: `You are a financial market assistant. Given a list of tweet headlines, return:
 
-1. A recommendation: **Buy**, **Sell**, or **Neutral** — based on the likely short-term, even momentary market reaction.
-2. A very brief summary of the overall sentiment.
+      1. A clear **investment recommendation** per asset or topic: Buy / Sell / Neutral.
+      2. A brief summary of the sentiment and why.
 
-Be objective, concise, and realistic. Focus only on actionable financial impact. If multiple assets are mentioned, give your view per asset.
-Use emojis to improve readability. Use bullet points for clarity.`
-          },
-          {
-            role: "user",
-            content: `Here are the latest tweets:\n\n${combinedText}`
-          }
+      Be concise, accurate, and avoid hype. Format output clearly.
+      Use emojis for clear understanding`
+    },
+    {
+      role: "user",
+      content: `Tweets:\n${combinedText}`
+    }
         ]
       });
 
       const result = completion.choices[0].message.content;
+      const formattedMessage = `🧵 **Tweets Analyzed:**\n${tweetBuffer.map((t, i) => `${i + 1}. ${t}`).join("\n")}
+
+      ${result}`;
+      
       const replyChannel = await client.channels.fetch(REPLY_CHANNEL);
       replyChannel.send(`📊 Bulk Tweet Analysis:\n${result}`);
     } catch (err) {
