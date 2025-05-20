@@ -75,8 +75,8 @@ client.on('messageCreate', async (message) => {
   // Wait 5 seconds after last message before processing
   bufferTimer = setTimeout(async () => {
     const combinedText = tweetBuffer.map((t, i) => `${i + 1}. ${t}`).join("\n\n");
-    
-    tweetBuffer = []; // Reset buffer
+    const tweetsToReport = [...tweetBuffer]; // Save before resetting
+    tweetBuffer = []; // Now safe to clear
 
     try {
       const completion = await openai.chat.completions.create({
@@ -100,9 +100,9 @@ client.on('messageCreate', async (message) => {
       });
 
       const result = completion.choices[0].message.content;
-      const formattedMessage = `🧵 **Tweets Analyzed:**\n${tweetBuffer.map((t, i) => `${i + 1}. ${t}`).join("\n")}
+      const formattedMessage = `🧵 **Tweets Analyzed:**\n${tweetsToReport.map((t, i) => `${i + 1}. ${t}`).join("\n")}
 
-      📊 Bulk Tweet Analysis:\n${result}`;
+📊 **Bulk Tweet Analysis:**\n${result}`;
       
       const replyChannel = await client.channels.fetch(REPLY_CHANNEL);
       replyChannel.send(`${formattedMessage}`);
